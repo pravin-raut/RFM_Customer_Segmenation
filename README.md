@@ -40,6 +40,10 @@ In summary, the combination of Spark Streaming, CDC, SCD-2, Merge operations, an
 ## Teaser
 
 
+https://user-images.githubusercontent.com/65663124/236565250-05fae923-b913-4c7c-a198-87d05aac7149.mp4
+
+
+
 ## Sample Output
 
 ![Cluster](https://user-images.githubusercontent.com/65663124/236554891-e88ac612-a009-46f4-9979-d77ee9a5cbd3.png)
