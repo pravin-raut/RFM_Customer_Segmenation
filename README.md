@@ -23,22 +23,28 @@ To get started with this project, follow the steps below:
 
 ## Usage
 
-Azure Databricks is used to process the IPL data. The data is read from Azure Blob Storage, and processed using Spark streaming DataFrames and delta live tables. Various analyses are performed on the data, including but not limited to:
+The customer segmentation project in Azure Databricks involves several key technologies and techniques to process books, customer, and orders data. 
 
-- Top batsmen and bowlers of the tournament
-- Team-wise and player-wise statistics
-- Analysis of player performance in various scenarios
+Firstly, Spark Streaming is used for real-time data processing from various sources such as Kafka. This allows for ingesting and processing large volumes of data in real-time.
 
-The results of the analysis are stored in delta tables, and are visualized using databricks visualization. Interactive dashboards are created to display the results of the analysis.
+Secondly, Change Data Capture (CDC) is used on the Customers table to capture any changes made to it. This allows for efficient tracking of changes made to the data and processing only the changed data instead of the entire dataset.
+
+Thirdly, Slowly Changing Dimension Type 2 (SCD-2) is used for the Books table. SCD-2 is a technique for handling changes to the dimensions in a data warehouse. It ensures that the history of changes to each dimension is preserved over time, which is important for accurate and meaningful analysis.
+
+Fourthly, Merge operations are used to combine data from different sources. For example, merging data from the Customers table and the Orders table allows us to obtain information on customer behavior and purchasing habits.
+
+Finally, K-Means is used for customer segmentation. K-Means is a clustering algorithm that groups similar customers together based on their purchasing behavior. This allows for targeted marketing campaigns and personalized recommendations to improve customer engagement and retention. 
+
+In summary, the combination of Spark Streaming, CDC, SCD-2, Merge operations, and K-Means clustering provides a comprehensive and efficient pipeline for processing data and performing customer segmentation in Azure Databricks.
 
 ## Teaser
 
-https://user-images.githubusercontent.com/65663124/235992291-1a7728bb-dfe7-4998-b64e-2f423fd8e417.mp4
 
 ## Sample Output
-![IPL](https://user-images.githubusercontent.com/65663124/236008312-88d732c0-33fc-48f6-8b47-567b4c04af68.png)
 
+![Cluster](https://user-images.githubusercontent.com/65663124/236554891-e88ac612-a009-46f4-9979-d77ee9a5cbd3.png)
 
+![RFM](https://user-images.githubusercontent.com/65663124/236554904-b8cc5069-acef-489b-9c5e-7b2a4431afaa.png)
 
 ## Contact Information
 https://www.linkedin.com/in/pravinraut16/
