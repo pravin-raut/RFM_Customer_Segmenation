@@ -1,0 +1,198 @@
+{
+    "job_id": 469449527908128,
+    "creator_user_name": "raut1606@gmail.com",
+    "run_as_user_name": "raut1606@gmail.com",
+    "run_as_owner": true,
+    "settings": {
+        "name": "Customer Segmentaion Streaming Pipeline",
+        "email_notifications": {
+            "no_alert_for_skipped_runs": false
+        },
+        "webhook_notifications": {},
+        "timeout_seconds": 0,
+        "max_concurrent_runs": 1,
+        "tasks": [
+            {
+                "task_key": "00_Setup",
+                "notebook_task": {
+                    "notebook_path": "/Repos/raut1606@gmail.com/RFM_Customer_Segmenation/01.SetUp",
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "0502-141753-io7z81xj",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                }
+            },
+            {
+                "task_key": "Kafka_To_Multiplex_Bronze",
+                "depends_on": [
+                    {
+                        "task_key": "00_Setup"
+                    }
+                ],
+                "notebook_task": {
+                    "notebook_path": "/Repos/raut1606@gmail.com/RFM_Customer_Segmenation/02.Kafka to Multiplex Bronze",
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "0502-141753-io7z81xj",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                }
+            },
+            {
+                "task_key": "Orders_Silver",
+                "depends_on": [
+                    {
+                        "task_key": "Kafka_To_Multiplex_Bronze"
+                    }
+                ],
+                "notebook_task": {
+                    "notebook_path": "/Repos/raut1606@gmail.com/RFM_Customer_Segmenation/02.Streaming Multiplex Bronze To OrdersSilver-Merge",
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "0502-141753-io7z81xj",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                }
+            },
+            {
+                "task_key": "Books_Silver_SCD",
+                "depends_on": [
+                    {
+                        "task_key": "Kafka_To_Multiplex_Bronze"
+                    }
+                ],
+                "notebook_task": {
+                    "notebook_path": "/Repos/raut1606@gmail.com/RFM_Customer_Segmenation/04.Streaming Multiplex Bronze To Books-SCD2",
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "0502-141753-io7z81xj",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                }
+            },
+            {
+                "task_key": "Customer_Silver",
+                "depends_on": [
+                    {
+                        "task_key": "Kafka_To_Multiplex_Bronze"
+                    }
+                ],
+                "notebook_task": {
+                    "notebook_path": "/Repos/raut1606@gmail.com/RFM_Customer_Segmenation/05.Streaming Multiplex Bronze To Customers-Merge",
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "0502-141753-io7z81xj",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                }
+            },
+            {
+                "task_key": "Customer_Orders",
+                "depends_on": [
+                    {
+                        "task_key": "Orders_Silver"
+                    },
+                    {
+                        "task_key": "Customer_Silver"
+                    }
+                ],
+                "notebook_task": {
+                    "notebook_path": "/Repos/raut1606@gmail.com/RFM_Customer_Segmenation/06-Customer Orders CDC",
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "0502-141753-io7z81xj",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                }
+            },
+            {
+                "task_key": "Book_Orders",
+                "depends_on": [
+                    {
+                        "task_key": "Books_Silver_SCD"
+                    },
+                    {
+                        "task_key": "Orders_Silver"
+                    }
+                ],
+                "notebook_task": {
+                    "notebook_path": "/Repos/raut1606@gmail.com/RFM_Customer_Segmenation/07.Book-Orders",
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "0502-141753-io7z81xj",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                }
+            },
+            {
+                "task_key": "Aggregate_Book_Customer_Orders",
+                "depends_on": [
+                    {
+                        "task_key": "Book_Orders"
+                    },
+                    {
+                        "task_key": "Customer_Orders"
+                    }
+                ],
+                "notebook_task": {
+                    "notebook_path": "/Repos/raut1606@gmail.com/RFM_Customer_Segmenation/08.Customer Segmentation-Gold",
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "0502-141753-io7z81xj",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                }
+            },
+            {
+                "task_key": "Customer_Segmentation_",
+                "depends_on": [
+                    {
+                        "task_key": "Aggregate_Book_Customer_Orders"
+                    }
+                ],
+                "notebook_task": {
+                    "notebook_path": "/Repos/raut1606@gmail.com/RFM_Customer_Segmenation/09.RFM Analysis",
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "0502-141753-io7z81xj",
+                "timeout_seconds": 0,
+                "email_notifications": {}
+            }
+        ],
+        "format": "MULTI_TASK"
+    },
+    "created_time": 1683266431317
+}
