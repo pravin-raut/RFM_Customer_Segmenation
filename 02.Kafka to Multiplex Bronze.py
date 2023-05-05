@@ -1,14 +1,5 @@
 # Databricks notebook source
-# MAGIC %run /Users/praut1606@gmail.com/RFMAnalysis/00.Initialization
-
-# COMMAND ----------
-
-dataset_bookstore="dbfs:/FileStore/tables/RFM"
-
-# COMMAND ----------
-
-files = dbutils.fs.ls(f"{dataset_bookstore}")
-display(files)
+# MAGIC %run ./01.SetUp
 
 # COMMAND ----------
 
@@ -19,11 +10,11 @@ def process_bronze():
     schema="key binary, value binary,topic string,partition long,offsert long,timestamp long"
     
     query=(spark.readStream.format("cloudFiles")\
-        .option("cloudFiles.format","json").schema(schema).load(f"{dataset_bookstore}")\
+        .option("cloudFiles.format","json").schema(schema).load(f"{SourceFiles}")\
         .withColumn("timestamp",(F.col("timestamp")/1000).cast("timestamp"))\
         .withColumn("year_month",F.date_format("timestamp","yyyy-MM"))\
         .writeStream\
-        .option("checkpointLocation","dbfs:/mnt/demo-pro/checkpoints/bronze")\
+        .option("checkpointLocation",CheckpointLocation+"/bronze")\
         .option("mergeSchema",True)\
         .partitionBy("topic","year_month")\
         .trigger(availableNow=True)\

@@ -1,51 +1,5 @@
 # Databricks notebook source
-# MAGIC %run /Users/praut1606@gmail.com/RFMAnalysis/00.Initialization
-
-# COMMAND ----------
-
-# MAGIC %sql
-# MAGIC select cast(key as string),cast(value as string) from bronze_multiplex where topic='orders' limit 20
-
-# COMMAND ----------
-
-# MAGIC %sql
-# MAGIC with temp1 as
-# MAGIC (
-# MAGIC select from_json(cast(value as string),"order_id String,order_timestamp Timestamp,customer_id string,quantity BIGINT,total BIGINT,books ARRAY<STRUCT<book_id STRING,quantity BIGINT,subtotal BIgint>>") as v from bronze_multiplex where topic="orders"
-# MAGIC )
-# MAGIC select v.* from temp1
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC ##Option 1 to create streaming view
-
-# COMMAND ----------
-
-spark.read\
-    .table("bronze_multiplex")\
-    .createOrReplaceTempView("bronze_tmp")
-
-# COMMAND ----------
-
-# MAGIC %sql
-# MAGIC create or replace temporary view bronze_Stereaming
-# MAGIC as
-# MAGIC with temp1 as
-# MAGIC (
-# MAGIC select from_json(cast(value as string),"order_id String,order_timestamp Timestamp,customer_id string,quantity BIGINT,total BIGINT,books ARRAY<STRUCT<book_id STRING,quantity BIGINT,subtotal BIgint>>") as v from bronze_tmp where topic="orders"
-# MAGIC )
-# MAGIC select v.* from temp1
-
-# COMMAND ----------
-
-# MAGIC %sql
-# MAGIC select distinct order_id,order_timestamp from bronze_Stereaming
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC ##Option 2 directly read as streaming table
+# MAGIC %run ./01.SetUp
 
 # COMMAND ----------
 
@@ -82,6 +36,11 @@ deduped_orders_df=(
 
 # COMMAND ----------
 
+# MAGIC %sql
+# MAGIC alter table orders_Silver add constraint timestamp_within_range check(order_timestamp>='2020-01-01')
+
+# COMMAND ----------
+
 def upsert_data(microBatchDF,batch):
     microBatchDF.createOrReplaceTempView("Orders_microbatch")
     
@@ -104,7 +63,7 @@ def upsert_data(microBatchDF,batch):
 
 query =(deduped_orders_df.writeStream
                 .foreachBatch(upsert_data)
-                .option("checkpointLocation","dbfs:/mnt/demo-pro/checkpoints/orders_silver1")
+                .option("checkpointLocation",CheckpointLocation+"/orders_silver1")
                 .trigger(availableNow=True)
                 .start()
 )
@@ -115,4 +74,4 @@ query.awaitTermination()
 
 # MAGIC %sql
 # MAGIC
-# MAGIC select count(*) from orders_silver
+# MAGIC select * from orders_silver

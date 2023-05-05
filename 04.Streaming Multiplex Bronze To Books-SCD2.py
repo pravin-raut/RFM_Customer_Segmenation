@@ -1,16 +1,5 @@
 # Databricks notebook source
-# MAGIC %run /Users/praut1606@gmail.com/RFMAnalysis/00.Initialization
-
-# COMMAND ----------
-
-json_schema="book_id String,title String,author String,price double,updated Timestamp"
-
-import pyspark.sql.functions as F
-spark.read.table("bronze_multiplex")\
-    .select(F.from_json(F.col("value").cast("string"),json_schema).alias("v"))\
-    .select("v.*")\
-    .filter("topic='books'")\
-    .display()
+# MAGIC %run ./01.SetUp
 
 # COMMAND ----------
 
@@ -71,11 +60,6 @@ def process_books():
 # COMMAND ----------
 
 process_books()
-
-# COMMAND ----------
-
-# MAGIC %sql
-# MAGIC select * from books_silver where Book_id='B13' order by 1
 
 # COMMAND ----------
 
