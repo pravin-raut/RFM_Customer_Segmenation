@@ -1,5 +1,5 @@
 # Databricks notebook source
-# MAGIC %run /Users/praut1606@gmail.com/RFMAnalysis/00.Initialization
+# MAGIC %run ./01.SetUp
 
 # COMMAND ----------
 

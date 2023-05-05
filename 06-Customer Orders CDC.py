@@ -5,8 +5,7 @@
 
 # MAGIC %sql
 # MAGIC
-# MAGIC alter table customers_silver
-# MAGIC set tblproperties(delta.enableChangeDataFeed=true)
+# MAGIC --alter table customers_silver set tblproperties(delta.enableChangeDataFeed=true)
 
 # COMMAND ----------
 
@@ -15,7 +14,7 @@
 
 # COMMAND ----------
 
-cdf_df=spark.readStream.format("delta").option("readChangeData",True).option("startingVersion",2).table("customers_silver")
+cdf_df=spark.read.format("delta").option("readChangeData",True).option("startingVersion",2).table("customers_silver")
 cdf_df.display()
 
 # COMMAND ----------

@@ -37,7 +37,7 @@ deduped_orders_df=(
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC alter table orders_Silver add constraint timestamp_within_range check(order_timestamp>='2020-01-01')
+# MAGIC --alter table orders_Silver add constraint timestamp_within_range check(order_timestamp>='2020-01-01')
 
 # COMMAND ----------
 
