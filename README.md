@@ -2,25 +2,23 @@
 
 ## Project Description
 
-This project aims to perform customer segmentation using Azure Databricks. Customer segmentation is the process of dividing customers into groups based on common characteristics. The purpose of this is to better understand customer behavior, preferences, and needs, which can then be used to tailor marketing strategies, improve customer satisfaction, and ultimately increase revenue.
+This project aims to perform customer segmentation using Azure Databricks. Customer segmentation is the process of dividing customers into groups based on recent purchase , how many time purchased and amount spend. The purpose of this is to better understand customer behavior, preferences, and needs, which can then be used to tailor marketing strategies, improve customer satisfaction, and ultimately increase revenue.
 
 ## Getting Started
 
 To get started with this project, follow the steps below:
 
 1. Create an Azure Databricks workspace and start a new cluster. You can choose the lowest configuration cluster to start with, which is the Standard_DS3_v2 instance with 2 cores and 14 GB RAM.
-
 2. Create an Azure Data Lake Storage Gen2 (ADLS Gen2) account in the Azure portal.
-
 3. In the ADLS Gen2 account, create a container for storing the IPL data.
 4. In the Azure portal, create an Azure Key Vault.
-
 5. Add a secret to the Key Vault that contains the ADLS Gen2 storage account key. This allows the Databricks cluster to access the ADLS Gen2 container.
 
+
 ## Data Flow
+![Streaminh](https://user-images.githubusercontent.com/65663124/236552871-4da9e836-f551-4ae2-b509-138efb2bea4a.png)
 
 
-The architecture diagram above depicts the flow of data in the project. The IPL data is sourced from https://cricsheet.org/downloads/. The data is then ingested into Azure Blob Storage, which serves as a data lake. Azure Databricks is used to read and process the data, and the results of the analysis are stored in Azure SQL Database.
 
 
 ## Usage
