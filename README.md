@@ -1,4 +1,4 @@
-# Customer Segmentation using Azure Databricks
+# Customer Segmentation(RFM) using Azure Databricks
 
 ## Project Description
 
